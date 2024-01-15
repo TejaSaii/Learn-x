@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from "express"
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv'
+
+dotenv.config();
 
 export function authenticateJwt(req: Request, res: Response, next: NextFunction){
   const authorization = req.headers.authorization;
@@ -7,7 +10,7 @@ export function authenticateJwt(req: Request, res: Response, next: NextFunction)
     return res.sendStatus(401);
   }
   const token: string = authorization.split(' ')[1];
-  jwt.verify(token, 'Secret', (err: any, payload) => {
+  jwt.verify(token, process.env.SECRET as string, (err: any, payload) => {
     if(err){
       return res.sendStatus(403);
     }
